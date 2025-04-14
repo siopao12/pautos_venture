@@ -20,7 +20,39 @@ $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : '../
 
 // Add debugging if needed
 // echo "Debug - Profile pic: " . $profile_pic;
+if (!isset($_SESSION['user_location'])) {
+  require_once '../config/db_config.php'; // Make sure this path is correct
+  
+  // Update this query to match your database structure
+  // Based on the PHP handler, we should get the formatted address through the address_id
+  $stmt = $pdo->prepare("
+    SELECT ul.location_type, ul.latitude, ul.longitude, ul.address_id, 
+           CONCAT_WS(', ', 
+             NULLIF(TRIM(CONCAT(ua.street_number, ' ', ua.street_name)), ''), 
+             ua.barangay, 
+             ua.city_municipality, 
+             ua.province, 
+             ua.postal_code
+           ) AS formatted_address
+    FROM user_locations ul
+    LEFT JOIN user_address ua ON ul.address_id = ua.address_id
+    WHERE ul.user_id = ?
+  ");
+  
+  $stmt->execute([$_SESSION['user_id']]);
+  $location = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if ($location) {
+    $_SESSION['user_location'] = [
+      'type' => $location['location_type'],
+      'lat' => $location['latitude'],
+      'lng' => $location['longitude'],
+      'address' => $location['formatted_address'] ?? "Unknown location"
+    ];
+  }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +73,11 @@ $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : '../
   <!-- Header -->
   <?php
     // Include the login form from auth/login.php
-    include '../includes/home_header.php';  
+    include '../includes/reusable/home_header.php';  
+?>
+<?php
+    // Include the login form from auth/login.php
+    include '../includes/reusable/home_profile.php';  
 ?>
   <!-- Sidebar Overlay -->
   <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
@@ -89,36 +125,46 @@ $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : '../
       <p class="text-muted">Your trusted errand service platform</p>
     </section>
 
-
- <!-- How It Works Section with Carousel -->
- <?php
+<?php
     // Include the login form from auth/login.php
-    include '../includes/home_coursell.php';  
+    include '../includes/reusable/home_coursell.php';  
 ?>
+ <!-- How It Works Section with Carousel -->
+
 
     <!-- Runner Search Section -->
 
     <?php
     // Include the login form from auth/login.php
-    include '../includes/home_runner.php';  
+    include '../includes/reusable/home_runner.php';  
 ?>
 
       <!-- Pagination -->
       <?php
     // Include the login form from auth/login.php
-    include '../includes/home_pagination.php';  
+    include '../includes/reusable/home_pagination.php';  
 ?>
+<!-- Location Modal -->
+<?php
+    // Include the login form from auth/login.php
+    include '../includes/reusable/home_location.php';  
+?>
+
     
   </main>
 
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
+  <!-- Google Maps JavaScript API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdjhhHxrq3PAHP2Om2wLcyGYCn9v8mqyk&libraries=places"></script>
   <!-- Custom JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../assests/js/home_runner.js"></script>
   <script src="../assests/js/upload_profile.js"></script>
-
+  <script> const hasLocation = <?php echo isset($_SESSION['user_location']) ? 'true' : 'false'; ?>; 
+  
+</script>
+  <script src="../assests/js/maps.js"></script>
 
 </body>
 </html>

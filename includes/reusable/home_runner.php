@@ -1,19 +1,37 @@
 <section class="runner-search mb-5">
-      <div class="row align-items-center mb-4">
-        <div class="col-lg-6">
-          <h2 class="fw-semibold">Top Runners in Davao City</h2>
-        </div>
-        <div class="col-lg-6">
-          <div class="d-flex flex-column flex-sm-row gap-2 mt-3 mt-lg-0">
-            <input type="text" class="form-control" placeholder="Search runners..." aria-label="Search runners">
-            <select class="form-select" style="width: auto;" aria-label="Sort runners">
-              <option value="recommended">Recommended</option>
-              <option value="rating">Highest Rating</option>
-              <option value="price">Lowest Price</option>
-            </select>
-          </div>
-        </div>
+  <div class="row align-items-center mb-4">
+    <div class="col-lg-6">
+      <?php
+        $area = 'your area'; // Default fallback
+
+        if (isset($_SESSION['user_location'])) {
+          $locationType = $_SESSION['user_location']['type'];
+
+          if ($locationType === 'address' && !empty($_SESSION['user_location']['address'])) {
+            // Use only the first part of the address (e.g., barangay or street)
+            $addressParts = explode(',', $_SESSION['user_location']['address']);
+            $area = htmlspecialchars(trim($addressParts[0]));
+          } elseif ($locationType === 'coordinates') {
+            // Placeholder for reverse geocoding
+            $area = 'your location'; // Optionally: "based on your pin"
+          }
+        }
+      ?>
+      <h2 class="fw-semibold">Top Runners in <?= $area ?></h2>
+    </div>
+    <div class="col-lg-6">
+      <div class="d-flex flex-column flex-sm-row gap-2 mt-3 mt-lg-0">
+        <input type="text" class="form-control" placeholder="Search runners..." aria-label="Search runners">
+        <select class="form-select" style="width: auto;" aria-label="Sort runners">
+          <option value="recommended">Recommended</option>
+          <option value="rating">Highest Rating</option>
+          <option value="price">Lowest Price</option>
+        </select>
       </div>
+    </div>
+  </div>
+</section>
+
 
       <!-- Runners Grid -->
       <div class="row g-4">

@@ -1,48 +1,3 @@
-<header class="header">
-  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" aria-expanded="false" aria-controls="sidebar">
-    <div class="hamburger-icon">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </button>
-
-  <a href="#" class="header-logo">
-    <img src="../assests/image/runner.png" style="height: 40px; margin-right: 10px;">
-    Pa-Utos
-  </a>
-
-  <div class="header-actions">
-    <div class="header-icon" aria-label="Saved items" role="button" tabindex="0">
-      <i class="bi bi-bookmark"></i>
-      <span class="badge rounded-pill">3</span>
-    </div>
-
-    <div class="header-icon" aria-label="Notifications" role="button" tabindex="0">
-      <i class="bi bi-bell"></i>
-      <span class="badge rounded-pill">5</span>
-    </div>
-
-    <div class="dropdown">
-    <img src="<?= isset($profile_pic) ? '../' . $profile_pic : '../assests/image/default-profile.jpg' ?>" 
-     alt="Profile"
-     class="profile-img"
-     id="profileDropdown"
-     data-bs-toggle="dropdown"
-     aria-expanded="false">
-
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-        <li><span class="dropdown-item-text fw-bold"><?= htmlspecialchars($user_name) ?></span></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="bi bi-person me-2"></i>Profile</a></li>
-        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="../auth/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-      </ul>
-    </div>
-  </div>
-</header>
-
 <!-- Profile Modal (moved outside of <ul>) -->
 <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -94,4 +49,3 @@ document.getElementById('profilePicture').addEventListener('change', function(e)
   }
 });
 </script>
-
