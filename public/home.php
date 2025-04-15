@@ -169,7 +169,6 @@ error_log("User " . $_SESSION['user_id'] . " has location: " . ($hasLocation ? "
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Google Maps JavaScript API -->
-
   <!-- Custom JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../assests/js/home_runner.js"></script>
