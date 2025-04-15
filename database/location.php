@@ -42,77 +42,106 @@ try {
     $formatted_address = $data['address'] ?? 'Unknown address';
     $current_time = date('Y-m-d H:i:s');
     
-    // Parse the formatted address to extract components
-    $address_components = parseAddressFromText($formatted_address);
+    // Check if location is the same as the stored one
+    // Only proceed with update if necessary
+    $location_changed = true;
     
-    // Start transaction
-    $pdo->beginTransaction();
+    if (isset($_SESSION['user_location'])) {
+        $stored_lat = floatval($_SESSION['user_location']['lat']);
+        $stored_lng = floatval($_SESSION['user_location']['lng']);
+        
+        // If coordinates are very close, skip the update
+        // Using a small epsilon for floating point comparison
+        $epsilon = 0.0001;
+        if (abs($stored_lat - $lat) < $epsilon && abs($stored_lng - $lng) < $epsilon) {
+            $location_changed = false;
+            
+            // Return success without performing database operations
+            ob_clean();
+            echo json_encode([
+                'success' => true, 
+                'message' => 'Location already up to date',
+                'address' => $formatted_address,
+                'status' => 'unchanged'
+            ]);
+            exit;
+        }
+    }
     
-    try {
-        // Create address record first
-        $address_stmt = $pdo->prepare("INSERT INTO user_address (
-            street_number, street_name, barangay, district, city_municipality, 
-            province, region, postal_code, landmark, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // Only continue if location has actually changed
+    if ($location_changed) {
+        // Parse the formatted address to extract components
+        $address_components = parseAddressFromText($formatted_address);
         
-        $address_stmt->execute([
-            $address_components['street_number'],
-            $address_components['street_name'],
-            $address_components['barangay'],
-            $address_components['district'],
-            $address_components['city_municipality'],
-            $address_components['province'],
-            $address_components['region'],
-            $address_components['postal_code'],
-            $address_components['landmark'],
-            $current_time,
-            $current_time
-        ]);
+        // Start transaction
+        $pdo->beginTransaction();
         
-        $address_id = $pdo->lastInsertId();
-        
-        // First, delete any existing location for this user
-        $delete_stmt = $pdo->prepare("DELETE FROM user_locations WHERE user_id = ?");
-        $delete_stmt->execute([$user_id]);
-        
-        // Then insert the new location
-        $location_stmt = $pdo->prepare("INSERT INTO user_locations 
-            (user_id, location_type, latitude, longitude, address_id, timestamp, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
-        
-        $location_stmt->execute([
-            $user_id, 
-            $type, 
-            $lat, 
-            $lng, 
-            $address_id, 
-            $current_time, 
-            $current_time
-        ]);
-        
-        // Commit transaction
-        $pdo->commit();
-        
-        // Update session with location info
-        $_SESSION['user_location'] = [
-            'type' => $type,
-            'lat' => $lat,
-            'lng' => $lng,
-            'address' => $formatted_address
-        ];
-        
-        // Return success
-        ob_clean();
-        echo json_encode([
-            'success' => true, 
-            'message' => 'Location saved successfully',
-            'address' => $formatted_address
-        ]);
-        
-    } catch (Exception $e) {
-        // Rollback on error
-        $pdo->rollBack();
-        throw $e;
+        try {
+            // Create address record first
+            $address_stmt = $pdo->prepare("INSERT INTO user_address (
+                street_number, street_name, barangay, district, city_municipality, 
+                province, region, postal_code, landmark, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            $address_stmt->execute([
+                $address_components['street_number'],
+                $address_components['street_name'],
+                $address_components['barangay'],
+                $address_components['district'],
+                $address_components['city_municipality'],
+                $address_components['province'],
+                $address_components['region'],
+                $address_components['postal_code'],
+                $address_components['landmark'],
+                $current_time,
+                $current_time
+            ]);
+            
+            $address_id = $pdo->lastInsertId();
+            
+            // First, delete any existing location for this user
+            $delete_stmt = $pdo->prepare("DELETE FROM user_locations WHERE user_id = ?");
+            $delete_stmt->execute([$user_id]);
+            
+            // Then insert the new location
+            $location_stmt = $pdo->prepare("INSERT INTO user_locations 
+                (user_id, location_type, latitude, longitude, address_id, timestamp, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
+            
+            $location_stmt->execute([
+                $user_id, 
+                $type, 
+                $lat, 
+                $lng, 
+                $address_id, 
+                $current_time, 
+                $current_time
+            ]);
+            
+            // Commit transaction
+            $pdo->commit();
+            
+            // Update session with location info
+            $_SESSION['user_location'] = [
+                'type' => $type,
+                'lat' => $lat,
+                'lng' => $lng,
+                'address' => $formatted_address
+            ];
+            
+            // Return success
+            ob_clean();
+            echo json_encode([
+                'success' => true, 
+                'message' => 'Location saved successfully',
+                'address' => $formatted_address,
+                'status' => 'updated'
+            ]);
+        } catch (Exception $e) {
+            // Rollback on error
+            $pdo->rollBack();
+            throw $e;
+        }
     }
     
 } catch (Exception $e) {

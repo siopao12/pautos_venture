@@ -18,9 +18,17 @@ $user_name = $_SESSION['user_name'] ?? '';
 // Get profile picture from session or use default
 $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : '../assests/image/default-profile.jpg';
 
-// Add debugging if needed
-// echo "Debug - Profile pic: " . $profile_pic;
-if (!isset($_SESSION['user_location'])) {
+// Initialize hasLocation flag
+$hasLocation = false;
+
+// Check if user has location in session
+if (isset($_SESSION['user_location']) && 
+    isset($_SESSION['user_location']['lat']) && 
+    isset($_SESSION['user_location']['lng'])) {
+    $hasLocation = true;
+}
+// If not in session, check database
+else {
   require_once '../config/db_config.php'; // Make sure this path is correct
   
   // Update this query to match your database structure
@@ -49,10 +57,15 @@ if (!isset($_SESSION['user_location'])) {
       'lng' => $location['longitude'],
       'address' => $location['formatted_address'] ?? "Unknown location"
     ];
+    
+    // Set hasLocation to true since we found location in database
+    $hasLocation = true;
   }
 }
-?>
 
+// Log for debugging
+error_log("User " . $_SESSION['user_id'] . " has location: " . ($hasLocation ? "YES" : "NO"));
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -156,6 +169,7 @@ if (!isset($_SESSION['user_location'])) {
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Google Maps JavaScript API -->
+
   <!-- Custom JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../assests/js/home_runner.js"></script>
