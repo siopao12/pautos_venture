@@ -1,19 +1,36 @@
 <section class="runner-search mb-5">
-      <div class="row align-items-center mb-4">
-        <div class="col-lg-6">
-          <h2 class="fw-semibold">Top Runners in Davao City</h2>
-        </div>
-        <div class="col-lg-6">
-          <div class="d-flex flex-column flex-sm-row gap-2 mt-3 mt-lg-0">
-            <input type="text" class="form-control" placeholder="Search runners..." aria-label="Search runners">
-            <select class="form-select" style="width: auto;" aria-label="Sort runners">
-              <option value="recommended">Recommended</option>
-              <option value="rating">Highest Rating</option>
-              <option value="price">Lowest Price</option>
-            </select>
-          </div>
-        </div>
+  <div class="row align-items-center mb-4">
+    <div class="col-lg-6">
+      <?php
+        $area = 'your area'; // Default fallback
+
+        if (isset($_SESSION['user_location'])) {
+          // Check if we have a formatted address
+          if (!empty($_SESSION['user_location']['address'])) {
+            // Extract the most relevant part of the address
+            $addressParts = explode(',', $_SESSION['user_location']['address']);
+            // Use the second part if available (usually city/municipality) or the first part
+            $area = htmlspecialchars(trim(isset($addressParts[1]) ? $addressParts[1] : $addressParts[0]));
+          } else {
+            $area = 'your current location';
+          }
+        }
+      ?>
+      <h2 class="fw-semibold">Top Runners in <?= $area ?></h2>
+    </div>
+    <div class="col-lg-6">
+      <div class="d-flex flex-column flex-sm-row gap-2 mt-3 mt-lg-0">
+        <input type="text" class="form-control" placeholder="Search runners..." aria-label="Search runners">
+        <select class="form-select" style="width: auto;" aria-label="Sort runners">
+          <option value="recommended">Recommended</option>
+          <option value="rating">Highest Rating</option>
+          <option value="price">Lowest Price</option>
+        </select>
       </div>
+    </div>
+  </div>
+</section>
+
 
       <!-- Runners Grid -->
       <div class="row g-4">

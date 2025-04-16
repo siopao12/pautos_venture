@@ -1,0 +1,180 @@
+/* Runner Modal Custom Styles */
+.modal-content {
+  border: none;
+  overflow: hidden;
+}
+
+/* Progress Bar Styles */
+.step-indicator {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+  position: relative;
+  padding-top: 15px;
+}
+
+.step-indicator::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  border: 2px solid #fff;
+}
+
+.step-indicator.active::before {
+  background-color: #0d6efd;
+}
+
+.step-indicator.completed::before {
+  background-color: #198754;
+  content: '✓';
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 16px;
+}
+
+.step-indicator.current {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+/* Upload Container Styles */
+.upload-container {
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-container:hover {
+  border-color: #0d6efd;
+}
+
+.upload-container i {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Category Card Styles */
+.category-card {
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.category-card .form-check-input:checked ~ .form-check-label {
+  color: #0d6efd;
+}
+
+.category-card .form-check-input:checked ~ .text-muted {
+  color: #495057 !important;
+}
+
+.category-card .form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* Transportation Method Cards */
+.transportation-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.transportation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.transportation-card.active-transport {
+  border-color: #0d6efd;
+  background-color: #f8f9ff;
+}
+
+.transportation-card.active-transport i {
+  color: #0d6efd;
+}
+
+.transportation-card.active-transport h6 {
+  color: #0d6efd;
+}
+
+/* Animation for transitions */
+.step-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form Styles */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-select:focus ~ label {
+  color: #0d6efd;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Preview container styles */
+.preview-container {
+  width: 100%;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .step-indicator {
+    font-size: 0.75rem;
+  }
+  
+  .step-indicator::before {
+    width: 16px;
+    height: 16px;
+    top: -8px;
+  }
+  
+  .step-indicator.completed::before {
+    line-height: 12px;
+    font-size: 10px;
+  }
+  
+  .modal-body {
+    padding: 1rem;
+  }
+  
+  .transportation-card {
+    margin-bottom: 15px;
+  }
+}

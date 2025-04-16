@@ -90,7 +90,7 @@
  <!-- Footer -->
  <?php
     // Include the login form from includes/footer.php
-    include '../includes/footer.php';  
+    include '../includes/reusable/footer.php';  
 ?>
 
    

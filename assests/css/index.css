@@ -11,6 +11,12 @@
         
         .navbar-brand {
             font-weight: bold;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
         }
         
         .hero-section {
