@@ -4,7 +4,7 @@
             <div class="row">
                 <!-- Company Info -->
                 <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                    <h5>Practico</h5>
+                    <h5>Pa-utos</h5>
                     <p>Your trusted errand runner service for all your daily needs.</p>
                     <div class="social-icons">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -20,8 +20,6 @@
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Services</a></li>
                         <li><a href="#">About</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Contact</a></li>
                     </ul>
                 </div>
                 

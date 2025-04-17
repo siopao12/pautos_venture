@@ -178,3 +178,59 @@
     margin-bottom: 15px;
   }
 }
+/* Add these styles to your CSS file */
+.service-category-card {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid #dee2e6;
+  overflow: hidden;
+}
+
+.service-category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.service-category-card.active-card {
+  border-color: var(--bs-primary);
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+.service-category-card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.subcategories-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+/* Make the badges look nicer */
+#selectedCategoriesContainer .badge {
+  font-weight: normal;
+  padding: 6px 10px;
+}
+
+/* Match styling with transportation cards from step 2 */
+.service-category-card {
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
+.service-category-card i {
+  font-size: 2.5rem;
+  transition: all 0.2s ease;
+}
+
+.service-category-card:hover i {
+  transform: scale(1.1);
+}
+
+/* Ensure consistent styling between steps */
+.category-details .card-header {
+  padding: 0.75rem 1rem;
+}

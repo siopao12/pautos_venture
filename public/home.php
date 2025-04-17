@@ -18,9 +18,17 @@ $user_name = $_SESSION['user_name'] ?? '';
 // Get profile picture from session or use default
 $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : '../assests/image/default-profile.jpg';
 
-// Add debugging if needed
-// echo "Debug - Profile pic: " . $profile_pic;
-if (!isset($_SESSION['user_location'])) {
+// Initialize hasLocation flag
+$hasLocation = false;
+
+// Check if user has location in session
+if (isset($_SESSION['user_location']) && 
+    isset($_SESSION['user_location']['lat']) && 
+    isset($_SESSION['user_location']['lng'])) {
+    $hasLocation = true;
+}
+// If not in session, check database
+else {
   require_once '../config/db_config.php'; // Make sure this path is correct
   
   // Update this query to match your database structure
@@ -49,8 +57,14 @@ if (!isset($_SESSION['user_location'])) {
       'lng' => $location['longitude'],
       'address' => $location['formatted_address'] ?? "Unknown location"
     ];
+    
+    // Set hasLocation to true since we found location in database
+    $hasLocation = true;
   }
 }
+
+// Log for debugging
+error_log("User " . $_SESSION['user_id'] . " has location: " . ($hasLocation ? "YES" : "NO"));
 ?>
 
 
@@ -159,7 +173,7 @@ if (!isset($_SESSION['user_location'])) {
 
 <?php
     // Include the login form from auth/login.php
-    include '../includes/reusable/runner_modal.php';  
+    include '../includes/modals/runner_modal.php';  
 ?>
     
   </main>
@@ -176,6 +190,7 @@ if (!isset($_SESSION['user_location'])) {
 </script>
   <script src="../assests/js/maps.js"></script>
   <script src="../assests/js/rn_application.js"></script>
+ <!-- <script src="../assests/js/rn_modal.js"></script> -->
 
 </body>
 </html>

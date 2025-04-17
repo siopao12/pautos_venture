@@ -157,14 +157,6 @@
                   </div>
                   <small class="text-muted">Maximum distance you're willing to travel on foot</small>
                 </div>
-                
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="walkingZipcode" name="walking_zipcode" placeholder="Primary ZIP/Postal Code">
-                    <label for="walkingZipcode">Primary ZIP/Postal Code</label>
-                  </div>
-                  <small class="text-muted">Your primary service area ZIP/Postal code</small>
-                </div>
               </div>
             </div>
             
@@ -177,10 +169,10 @@
                   <div class="form-floating mb-3">
                     <select class="form-select" id="transitType" name="transit_type">
                       <option value="" selected disabled>Select preferred transit type</option>
-                      <option value="Bus">Bus</option>
-                      <option value="Subway">Subway/Metro</option>
-                      <option value="Train">Train</option>
-                      <option value="Tram">Tram/Light Rail</option>
+                      <option value="Bus">Motorcycle</option>
+                      <option value="Subway">Tricycle</option>
+                      <option value="Train">Jeepney</option>
+                      <option value="Tram">Taxi</option>
                       <option value="Multiple">Multiple Transit Types</option>
                     </select>
                     <label for="transitType">Preferred Transit Type</label>
@@ -194,109 +186,181 @@
                   </div>
                   <small class="text-muted">Maximum distance you're willing to travel via public transit</small>
                 </div>
-                
-                <div class="col-12">
-                  <div class="form-floating mb-3">
-                    <textarea class="form-control" id="transitRoutes" name="transit_routes" placeholder="Common Transit Routes" style="height: 100px"></textarea>
-                    <label for="transitRoutes">Common Transit Routes/Lines</label>
-                  </div>
-                  <small class="text-muted">List transit lines or routes you commonly use (e.g., "Red Line, Bus 42, Blue Line")</small>
-                </div>
               </div>
             </div>
           </div>
 
-          <!-- Step 3: Service Categories -->
-          <div class="step-content d-none" id="step3">
-            <h5 class="mb-4 text-secondary">Step 3: Choose Service Categories</h5>
-            <p class="text-muted mb-4">Select the categories of services you're willing to provide as a runner:</p>
-            
-            <div class="row g-3">
-              <!-- Cleaning Category -->
-              <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100 category-card">
-                  <div class="card-body">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="cleaning" id="cleaningCategory" name="categories[]">
-                      <label class="form-check-label fw-bold" for="cleaningCategory">Cleaning</label>
-                    </div>
-                    <p class="text-muted small">House cleaning, disinfecting, office cleaning, etc.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Shopping + Delivery Category -->
-              <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100 category-card">
-                  <div class="card-body">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="delivery" id="deliveryCategory" name="categories[]">
-                      <label class="form-check-label fw-bold" for="deliveryCategory">Shopping + Delivery</label>
-                    </div>
-                    <p class="text-muted small">Grocery shopping, medicine pickup, food delivery, etc.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Babysitter Category -->
-              <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100 category-card">
-                  <div class="card-body">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="babysitter" id="babysitterCategory" name="categories[]">
-                      <label class="form-check-label fw-bold" for="babysitterCategory">Babysitter</label>
-                    </div>
-                    <p class="text-muted small">Child care, baby sitting, homework help, etc.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Personal Assistant Category -->
-              <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100 category-card">
-                  <div class="card-body">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="assistant" id="assistantCategory" name="categories[]">
-                      <label class="form-check-label fw-bold" for="assistantCategory">Personal Assistant</label>
-                    </div>
-                    <p class="text-muted small">Admin tasks, scheduling, research, etc.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Senior Citizen Assistance Category -->
-              <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100 category-card">
-                  <div class="card-body">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="senior" id="seniorCategory" name="categories[]">
-                      <label class="form-check-label fw-bold" for="seniorCategory">Senior Citizen Assistance</label>
-                    </div>
-                    <p class="text-muted small">Medication reminders, companionship, meal prep, etc.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Pet Care Services Category -->
-              <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100 category-card">
-                  <div class="card-body">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="petcare" id="petcareCategory" name="categories[]">
-                      <label class="form-check-label fw-bold" for="petcareCategory">Pet Care Services</label>
-                    </div>
-                    <p class="text-muted small">Pet sitting, dog walking, pet grooming, etc.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="alert alert-info mt-4">
-              <i class="bi bi-info-circle me-2"></i>
-              Please choose at least one category. You can update your service categories later.
-            </div>
-          </div>
+      <!-- Add this to step 3 of your runner application form -->
+<div id="step3" class="step-content d-none">
+  <h4 class="mb-4">Service Categories</h4>
+  
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i> Please choose at least one category. You can update your service categories later.
+  </div>
+  
+  <!-- Hidden input to track selected main category -->
+  <input type="hidden" id="selectedMainCategory" name="selectedMainCategory" value="">
+  
+  <div class="row g-3 mb-4">
+    <!-- Main Category Cards - Using the same styling as transportation cards -->
+    <div class="col-md-4 col-sm-6">
+      <div class="card service-category-card h-100" data-category="cleaning">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-house-check text-primary mb-3" style="font-size: 2rem;"></i>
+          <h5 class="card-title mb-0">Cleaning</h5>
         </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+      <div class="card service-category-card h-100" data-category="shopping-delivery">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-cart3 text-primary mb-3" style="font-size: 2rem;"></i>
+          <h5 class="card-title mb-0">Shopping + Delivery</h5>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+      <div class="card service-category-card h-100" data-category="babysitter">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-people text-primary mb-3" style="font-size: 2rem;"></i>
+          <h5 class="card-title mb-0">Babysitter</h5>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+      <div class="card service-category-card h-100" data-category="personal-assistant">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-briefcase text-primary mb-3" style="font-size: 2rem;"></i>
+          <h5 class="card-title mb-0">Personal Assistant</h5>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+      <div class="card service-category-card h-100" data-category="senior-assistance">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-heart-pulse text-primary mb-3" style="font-size: 2rem;"></i>
+          <h5 class="card-title mb-0">Senior Assistance</h5>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+      <div class="card service-category-card h-100" data-category="pet-care">
+        <div class="card-body text-center p-3">
+          <i class="bi bi-piggy-bank text-primary mb-3" style="font-size: 2rem;"></i>
+          <h5 class="card-title mb-0">Pet Care</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Category Detail Sections - Following the same pattern as transportation details -->
+  <!-- Cleaning Details Section -->
+  <div id="cleaningDetailsSection" class="category-details d-none mb-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary bg-opacity-10 border-primary">
+        <h5 class="mb-0">Cleaning Services</h5>
+      </div>
+      <div class="card-body">
+        <p class="small text-muted mb-3">Select the specific cleaning services you can provide:</p>
+        <div class="subcategories-list">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Shopping & Delivery Details Section -->
+  <div id="shopping-deliveryDetailsSection" class="category-details d-none mb-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary bg-opacity-10 border-primary">
+        <h5 class="mb-0">Shopping & Delivery Services</h5>
+      </div>
+      <div class="card-body">
+        <p class="small text-muted mb-3">Select the specific shopping and delivery services you can provide:</p>
+        <div class="subcategories-list">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Babysitter Details Section -->
+  <div id="babysitterDetailsSection" class="category-details d-none mb-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary bg-opacity-10 border-primary">
+        <h5 class="mb-0">Babysitting Services</h5>
+      </div>
+      <div class="card-body">
+        <p class="small text-muted mb-3">Select the specific childcare services you can provide:</p>
+        <div class="subcategories-list">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Personal Assistant Details Section -->
+  <div id="personal-assistantDetailsSection" class="category-details d-none mb-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary bg-opacity-10 border-primary">
+        <h5 class="mb-0">Personal Assistant Services</h5>
+      </div>
+      <div class="card-body">
+        <p class="small text-muted mb-3">Select the specific assistant services you can provide:</p>
+        <div class="subcategories-list">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Senior Assistance Details Section -->
+  <div id="senior-assistanceDetailsSection" class="category-details d-none mb-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary bg-opacity-10 border-primary">
+        <h5 class="mb-0">Senior Assistance Services</h5>
+      </div>
+      <div class="card-body">
+        <p class="small text-muted mb-3">Select the specific senior care services you can provide:</p>
+        <div class="subcategories-list">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pet Care Details Section -->
+  <div id="pet-careDetailsSection" class="category-details d-none mb-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary bg-opacity-10 border-primary">
+        <h5 class="mb-0">Pet Care Services</h5>
+      </div>
+      <div class="card-body">
+        <p class="small text-muted mb-3">Select the specific pet care services you can provide:</p>
+        <div class="subcategories-list">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Selected Categories Summary -->
+  <div class="card mt-4">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">Selected Services</h5>
+    </div>
+    <div class="card-body">
+      <div id="selectedCategoriesContainer">
+        <div class="text-muted">No categories selected</div>
+      </div>
+    </div>
+  </div>
+</div>
 
         <!-- Modal Footer -->
         <div class="modal-footer border-top-0">
