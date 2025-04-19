@@ -1,7 +1,7 @@
 <?php
 // Database configuration
 $host = 'localhost';
-$dbname = 'pautos_venture';
+$dbname = 'pautos-veture';
 $username = 'root';
 $password = '';
 

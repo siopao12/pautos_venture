@@ -52,7 +52,7 @@ if (empty($errors)) {
         if ($_SESSION['user_role_id'] == 2) { // Runner
             $redirect_url = '../public/runner_dashboard.php';
         } elseif ($_SESSION['user_role_id'] == 3) { // Owner
-            $redirect_url = '../public/owner_dashboard.php';
+            $redirect_url = '../public/owner/owner-dashboard.php';
         } elseif ($_SESSION['user_role_id'] == 4) { // Admin
             $redirect_url = '../public/admin_dashboard.php';
         }

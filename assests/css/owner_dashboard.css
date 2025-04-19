@@ -1,0 +1,52 @@
+
+.sidebar {
+    min-height: 100vh;
+    background-color: #343a40;
+    color: white;
+}
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+}
+.sidebar .nav-link:hover {
+    color: white;
+}
+.sidebar .nav-link.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.main-content {
+    padding: 20px;
+}
+.profile-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.runner-card {
+    transition: transform 0.2s;
+}
+.runner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.status-pending {
+    background-color: #ffc107;
+}
+.status-approved {
+    background-color: #28a745;
+}
+.status-rejected {
+    background-color: #dc3545;
+}
+.status-badge {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.modal-img {
+    max-width: 100%;
+    height: auto;
+}

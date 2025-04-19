@@ -152,7 +152,9 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3">
-                    <input type="number" class="form-control" id="serviceRadius" name="service_radius" placeholder="Service Radius" min="1" max="50">
+                    <!-- After -->
+<input type="number" class="form-control" id="serviceRadius" name="service_radius" placeholder="Service Radius" min="1" max="50" data-required>
+
                     <label for="serviceRadius">Service Radius (km)</label>
                   </div>
                   <small class="text-muted">Maximum distance you're willing to travel on foot</small>
@@ -169,10 +171,10 @@
                   <div class="form-floating mb-3">
                     <select class="form-select" id="transitType" name="transit_type">
                       <option value="" selected disabled>Select preferred transit type</option>
-                      <option value="Bus">Motorcycle</option>
-                      <option value="Subway">Tricycle</option>
-                      <option value="Train">Jeepney</option>
-                      <option value="Tram">Taxi</option>
+                      <option value="Motorcycle">Motorcycle</option>
+                      <option value="Tricycle">Tricycle</option>
+                      <option value="Jeepney">Jeepney</option>
+                      <option value="Taxi">Taxi</option>
                       <option value="Multiple">Multiple Transit Types</option>
                     </select>
                     <label for="transitType">Preferred Transit Type</label>
@@ -181,7 +183,8 @@
                 
                 <div class="col-md-6">
                   <div class="form-floating mb-3">
-                    <input type="number" class="form-control" id="transitRadius" name="transit_radius" placeholder="Service Radius" min="1" max="100">
+                    <input type="number" class="form-control" id="transitRadius" name="transit_radius" placeholder="Service Radius" min="1" max="100" data-required>
+                    <!-- After -->
                     <label for="transitRadius">Service Radius (km)</label>
                   </div>
                   <small class="text-muted">Maximum distance you're willing to travel via public transit</small>
