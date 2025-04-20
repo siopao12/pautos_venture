@@ -70,7 +70,7 @@
               </div>
             </div>
             <div class="card-footer bg-white border-top-0 pt-0">
-              <button class="btn btn-primary w-100">View Profile</button>
+              <button class="btn btn-primary w-100">Book Now</button>
             </div>
           </div>
         </div>

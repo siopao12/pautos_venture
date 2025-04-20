@@ -50,7 +50,7 @@ if (empty($errors)) {
         
         // Check role and set appropriate redirect
         if ($_SESSION['user_role_id'] == 2) { // Runner
-            $redirect_url = '../public/runner_dashboard.php';
+            $redirect_url = '../public/runner/runner_dashboard.php';
         } elseif ($_SESSION['user_role_id'] == 3) { // Owner
             $redirect_url = '../public/owner/owner-dashboard.php';
         } elseif ($_SESSION['user_role_id'] == 4) { // Admin
