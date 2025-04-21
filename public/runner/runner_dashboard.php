@@ -376,9 +376,10 @@
                                 <button class="btn btn-outline-secondary" type="button">
                                     <i class="bi bi-gear"></i> Settings
                                 </button>
-                                <button class="btn btn-outline-danger" type="button">
-                                    <i class="bi bi-box-arrow-right"></i> Sign Out
-                                </button>
+                                <a href="../../auth/logout.php" class="btn btn-outline-danger" role="button">
+    <i class="bi bi-box-arrow-right"></i> Sign Out
+</a>
+
                             </div>
                         </div>
                     </div>
