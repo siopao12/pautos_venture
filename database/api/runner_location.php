@@ -73,79 +73,84 @@ try {
     
     // First, insert or update the address in user_address table if address info is available
     $address_id = null;
-    if ($street_name && $city) { // Minimum criteria for a valid address
+    
+    // UPDATED LOGIC: Check if the user already has an address record
+    $checkUserAddressQuery = "SELECT ul.address_id 
+                             FROM user_locations ul
+                             WHERE ul.user_id = ? AND ul.address_id IS NOT NULL
+                             ORDER BY ul.timestamp DESC LIMIT 1";
+    $checkUserStmt = $pdo->prepare($checkUserAddressQuery);
+    $checkUserStmt->execute([$user_id]);
+    $existingUserAddress = $checkUserStmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($existingUserAddress && $existingUserAddress['address_id']) {
+        // User has an existing address, update it instead of creating a new one
+        $address_id = $existingUserAddress['address_id'];
+        
+        // Update the existing address with new information
+        $updateAddressQuery = "UPDATE user_address SET 
+                              street_number = ?, 
+                              street_name = ?, 
+                              barangay = ?, 
+                              city_municipality = ?, 
+                              province = ?, 
+                              postal_code = ?, 
+                              updated_at = NOW()
+                              WHERE address_id = ?";
+                              
+        $updateAddressStmt = $pdo->prepare($updateAddressQuery);
+        $updateAddressStmt->execute([
+            $street_number,
+            $street_name,
+            $barangay,
+            $city,
+            $province,
+            $postal_code,
+            $address_id
+        ]);
+    } 
+    // Only create a new address if the user doesn't have one yet and we have address info
+    elseif ($street_name && $city) {
         try {
-            // Check if we already have this address in the system using normalized fields
-            $checkAddressQuery = "SELECT address_id FROM user_address 
-                                WHERE street_name = ? AND city_municipality = ? AND province = ?";
-            $checkStmt = $pdo->prepare($checkAddressQuery);
-            $checkStmt->execute([$street_name, $city, $province]);
-            $existingAddress = $checkStmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($existingAddress) {
-                $address_id = $existingAddress['address_id'];
-
-                // Update the existing address
-                $updateAddressQuery = "UPDATE user_address SET 
-                        street_number = ?, 
-                        street_name = ?, 
-                        barangay = ?, 
-                        city_municipality = ?, 
-                        province = ?, 
-                        postal_code = ?, 
-                        updated_at = NOW()
-                        WHERE address_id = ?";
-
-                $updateAddressStmt = $pdo->prepare($updateAddressQuery);
-                $updateAddressStmt->execute([
-                    $street_number,
-                    $street_name,
-                    $barangay,
-                    $city,
-                    $province,
-                    $postal_code,
-                    $address_id
-                ]);
-            } else {
-                // Check if user_address table has an updated_at column
-                $hasUpdatedAtColumn = false;
-                try {
-                    $columnCheckStmt = $pdo->query("SHOW COLUMNS FROM user_address LIKE 'updated_at'");
-                    $hasUpdatedAtColumn = $columnCheckStmt->rowCount() > 0;
-                } catch (PDOException $e) {
-                    // Ignore this error, assume column doesn't exist
-                }
-
-                // Insert new address with or without updated_at - FIXED QUERIES
-                if ($hasUpdatedAtColumn) {
-                    $insertAddressQuery = "INSERT INTO user_address 
-                            (street_number, street_name, barangay, city_municipality, 
-                            province, postal_code, created_at, updated_at) 
-                            VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
-                } else {
-                    $insertAddressQuery = "INSERT INTO user_address 
-                            (street_number, street_name, barangay, city_municipality, 
-                            province, postal_code, created_at) 
-                            VALUES (?, ?, ?, ?, ?, ?, NOW())";
-                }
-
-                $insertAddressStmt = $pdo->prepare($insertAddressQuery);
-                $insertAddressStmt->execute([
-                    $street_number,
-                    $street_name,
-                    $barangay,
-                    $city,
-                    $province,
-                    $postal_code
-                ]);
-
-                $address_id = $pdo->lastInsertId();
+            // Check if user_address table has an updated_at column
+            $hasUpdatedAtColumn = false;
+            try {
+                $columnCheckStmt = $pdo->query("SHOW COLUMNS FROM user_address LIKE 'updated_at'");
+                $hasUpdatedAtColumn = $columnCheckStmt->rowCount() > 0;
+            } catch (PDOException $e) {
+                // Ignore this error, assume column doesn't exist
             }
+
+            // Insert new address with or without updated_at
+            if ($hasUpdatedAtColumn) {
+                $insertAddressQuery = "INSERT INTO user_address 
+                        (street_number, street_name, barangay, city_municipality, 
+                        province, postal_code, created_at, updated_at) 
+                        VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            } else {
+                $insertAddressQuery = "INSERT INTO user_address 
+                        (street_number, street_name, barangay, city_municipality, 
+                        province, postal_code, created_at) 
+                        VALUES (?, ?, ?, ?, ?, ?, NOW())";
+            }
+
+            $insertAddressStmt = $pdo->prepare($insertAddressQuery);
+            $insertAddressStmt->execute([
+                $street_number,
+                $street_name,
+                $barangay,
+                $city,
+                $province,
+                $postal_code
+            ]);
+
+            $address_id = $pdo->lastInsertId();
         } catch (PDOException $e) {
             error_log("Address update error: " . $e->getMessage());
             throw $e; // Re-throw to be caught by the outer try-catch
         }
     }
+    
     // Check if a current location already exists
     try {
         $checkQuery = "SELECT location_id FROM user_locations WHERE user_id = ? AND location_type = 'current'";

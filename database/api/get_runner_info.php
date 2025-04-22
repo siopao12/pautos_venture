@@ -68,7 +68,7 @@ try {
     
     // Get latest location information
     $location_query = "SELECT ul.latitude, ul.longitude, ul.timestamp, ua.street_number, ua.street_name, 
-                              ua.barangay, ua.city_municipality, ua.province
+                              ua.barangay, ua.city_municipality, ua.province, ua.postal_code
                        FROM user_locations ul
                        LEFT JOIN user_address ua ON ul.address_id = ua.address_id
                        WHERE ul.user_id = :user_id
@@ -80,13 +80,29 @@ try {
     $location_data = $location_stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($location_data) {
+        // Build address string, handling null values properly
+        $address_parts = [];
+        if (!empty($location_data['street_number'])) $address_parts[] = $location_data['street_number'];
+        if (!empty($location_data['street_name'])) $address_parts[] = $location_data['street_name'];
+        if (!empty($location_data['barangay'])) $address_parts[] = $location_data['barangay'];
+        if (!empty($location_data['city_municipality'])) $address_parts[] = $location_data['city_municipality'];
+        if (!empty($location_data['province'])) $address_parts[] = $location_data['province'];
+        
+        $formatted_address = implode(', ', $address_parts);
+        
         $response['location'] = [
             'latitude' => $location_data['latitude'],
             'longitude' => $location_data['longitude'],
             'timestamp' => $location_data['timestamp'],
-            'address' => $location_data['street_number'] . ' ' . $location_data['street_name'] . ', ' . 
-                         $location_data['barangay'] . ', ' . $location_data['city_municipality'] . ', ' . 
-                         $location_data['province']
+            'address' => $formatted_address,
+            'address_parts' => [
+                'street_number' => $location_data['street_number'] ?? '',
+                'street_name' => $location_data['street_name'] ?? '',
+                'barangay' => $location_data['barangay'] ?? '',
+                'city' => $location_data['city_municipality'] ?? '',
+                'province' => $location_data['province'] ?? '',
+                'postal_code' => $location_data['postal_code'] ?? ''
+            ]
         ];
     }
     
@@ -103,7 +119,7 @@ try {
         
         if ($runner_data) {
             $response['runner_id'] = $runner_data['runner_id'];
-            $response['transportation_method'] = $runner_data['transportation_method'];
+            $response['transportation_method'] = $runner_data['transportation_method'] ?? 'Not specified';
             $response['application_status'] = $runner_data['application_status'];
             $response['is_available'] = (bool)$runner_data['is_available'];
             
@@ -143,7 +159,7 @@ try {
             $services_data = $services_stmt->fetchAll(PDO::FETCH_ASSOC);
             
             $response['service_categories'] = [];
-            if ($services_data) {
+            if ($services_data && count($services_data) > 0) {
                 foreach ($services_data as $service) {
                     $response['service_categories'][] = $service['subcategory_name'];
                 }

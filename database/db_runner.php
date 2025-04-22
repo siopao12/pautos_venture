@@ -26,8 +26,8 @@ try {
         // Get user ID from session
         $userId = $_SESSION['user_id'];
         
-        // File upload handling - Updated path to match your folder structure
-        $uploadDir = '../assests/image/upload/runner_docs/';
+        // File upload handling - Physical path for moving uploaded files
+        $uploadDir = '../assests/image/uploads/runner_docs/';
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
@@ -36,11 +36,17 @@ try {
         $idPhotoPath = '';
         if (isset($_FILES['id_photo']) && $_FILES['id_photo']['error'] === UPLOAD_ERR_OK) {
             $idPhotoName = 'id_' . time() . '_' . basename($_FILES['id_photo']['name']);
-            $idPhotoPath = $uploadDir . $idPhotoName;
+            $physicalPath = $uploadDir . $idPhotoName;
             
-            if (!move_uploaded_file($_FILES['id_photo']['tmp_name'], $idPhotoPath)) {
+            if (!move_uploaded_file($_FILES['id_photo']['tmp_name'], $physicalPath)) {
                 throw new Exception("Failed to upload ID photo");
             }
+            
+            // Store simplified path in database - this is the key change!
+            $idPhotoPath = "assests/image/uploads/runner_docs/" . $idPhotoName;
+            
+            // Log path for debugging
+            error_log("Storing ID photo path in DB: " . $idPhotoPath);
         } else {
             throw new Exception("ID photo is required");
         }
@@ -49,11 +55,17 @@ try {
         $selfiePhotoPath = '';
         if (isset($_FILES['selfie_photo']) && $_FILES['selfie_photo']['error'] === UPLOAD_ERR_OK) {
             $selfiePhotoName = 'selfie_' . time() . '_' . basename($_FILES['selfie_photo']['name']);
-            $selfiePhotoPath = $uploadDir . $selfiePhotoName;
+            $physicalPath = $uploadDir . $selfiePhotoName;
             
-            if (!move_uploaded_file($_FILES['selfie_photo']['tmp_name'], $selfiePhotoPath)) {
+            if (!move_uploaded_file($_FILES['selfie_photo']['tmp_name'], $physicalPath)) {
                 throw new Exception("Failed to upload selfie photo");
             }
+            
+            // Store simplified path in database
+            $selfiePhotoPath = "assests/image/uploads/runner_docs/" . $selfiePhotoName;
+            
+            // Log path for debugging
+            error_log("Storing selfie photo path in DB: " . $selfiePhotoPath);
         } else {
             throw new Exception("Selfie photo is required");
         }
@@ -82,11 +94,17 @@ try {
             $vehiclePhotoPath = '';
             if (isset($_FILES['vehicle_photo']) && $_FILES['vehicle_photo']['error'] === UPLOAD_ERR_OK) {
                 $vehiclePhotoName = 'vehicle_' . time() . '_' . basename($_FILES['vehicle_photo']['name']);
-                $vehiclePhotoPath = $uploadDir . $vehiclePhotoName;
+                $physicalPath = $uploadDir . $vehiclePhotoName;
                 
-                if (!move_uploaded_file($_FILES['vehicle_photo']['tmp_name'], $vehiclePhotoPath)) {
+                if (!move_uploaded_file($_FILES['vehicle_photo']['tmp_name'], $physicalPath)) {
                     // Log issue but continue
                     error_log("Warning: Could not upload vehicle photo");
+                } else {
+                    // Store simplified path in database
+                    $vehiclePhotoPath = "assests/image/uploads/runner_docs/" . $vehiclePhotoName;
+                    
+                    // Log path for debugging
+                    error_log("Storing vehicle photo path in DB: " . $vehiclePhotoPath);
                 }
             }
             
@@ -202,15 +220,9 @@ try {
     $response['success'] = false;
     $response['message'] = $e->getMessage();
     
-    // Clean up uploaded files on error
-    if (isset($idPhotoPath) && file_exists($idPhotoPath)) {
-        unlink($idPhotoPath);
-    }
-    if (isset($selfiePhotoPath) && file_exists($selfiePhotoPath)) {
-        unlink($selfiePhotoPath);
-    }
-    if (isset($vehiclePhotoPath) && file_exists($vehiclePhotoPath)) {
-        unlink($vehiclePhotoPath);
+    // Clean up uploaded files on error - use the correct physical paths here
+    if (isset($physicalPath) && file_exists($physicalPath)) {
+        unlink($physicalPath);
     }
     
     // Log detailed error information

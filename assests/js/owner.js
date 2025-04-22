@@ -124,7 +124,7 @@ function displayRunnerApplications(runners) {
         }
         
         // Get profile photo or use placeholder
-        const profilePhoto = runner.profile_photo || 'assets/img/default-profile.jpg';
+        const profilePhoto = runner.profile_photo || 'assests/image/uploads/profile_pictures/default-profile.jpg';
         
         // Format application date
         const applicationDate = new Date(runner.created_at).toLocaleDateString();
@@ -320,7 +320,7 @@ function openRunnerDetailsModal(runnerId) {
     $('#modal-runner-date').text(new Date(runner.created_at).toLocaleDateString());
     
     // Set runner profile image
-    const profilePhoto = runner.profile_photo || 'assets/img/default-profile.jpg';
+    const profilePhoto = runner.profile_photo || 'assests/image/uploads/profile_pictures/default-profile.jpg';
     $('#modal-runner-profile').attr('src', profilePhoto);
     
     // Set status badge
