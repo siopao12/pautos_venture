@@ -392,5 +392,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Maps API (Use your own API key here) -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdjhhHxrq3PAHP2Om2wLcyGYCn9v8mqyk&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
     <script src ="../../assests/js/runner_dashboard.js"></script>
