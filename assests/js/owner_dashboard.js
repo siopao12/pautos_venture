@@ -6,6 +6,10 @@ let currentFilters = {
     search: ''
 };
 
+// Define base URL for assets
+// This will be used for all image paths to handle the JS file being in a different location
+const BASE_URL = '../../';
+
 // DOM Ready
 $(document).ready(function() {
     // Fetch runner applications
@@ -123,8 +127,10 @@ function displayRunnerApplications(runners) {
                 transportIcon = '<i class="fas fa-question me-1"></i>';
         }
         
-        // Get profile photo or use placeholder
-        const profilePhoto = runner.profile_photo || 'assests/image/uploads/profile_pictures/default-profile.jpg';
+        // Get profile photo or use placeholder - Using BASE_URL
+        const profilePhoto = runner.profile_photo ? 
+            BASE_URL + runner.profile_photo : 
+            BASE_URL + 'assests/image/uploads/profile_pictures/default-profile.jpg';
         
         // Format application date
         const applicationDate = new Date(runner.created_at).toLocaleDateString();
@@ -139,7 +145,7 @@ function displayRunnerApplications(runners) {
                     </div>
                     <div class="card-body">
                         <div class="d-flex mb-3">
-                            <img src="${profilePhoto}" class="profile-img me-3" alt="${runner.user_name}">
+                            <img src="${profilePhoto}" class="profile-img me-3" alt="${runner.user_name}" onerror="this.src='${BASE_URL}assests/image/uploads/profile_pictures/default-profile.jpg'">
                             <div>
                                 <h5 class="card-title mb-0">${runner.user_name}</h5>
                                 <p class="text-muted mb-0">${runner.user_email}</p>
@@ -319,9 +325,14 @@ function openRunnerDetailsModal(runnerId) {
     $('#modal-runner-phone').text(runner.user_phone);
     $('#modal-runner-date').text(new Date(runner.created_at).toLocaleDateString());
     
-    // Set runner profile image
-    const profilePhoto = runner.profile_photo || 'assests/image/uploads/profile_pictures/default-profile.jpg';
-    $('#modal-runner-profile').attr('src', profilePhoto);
+    // Set runner profile image with proper path and fallback - Using BASE_URL
+    const profilePhoto = runner.profile_photo ? 
+        BASE_URL + runner.profile_photo : 
+        BASE_URL + 'assests/image/uploads/profile_pictures/default-profile.jpg';
+    $('#modal-runner-profile').attr('src', profilePhoto)
+        .on('error', function() {
+            $(this).attr('src', BASE_URL + 'assests/image/uploads/profile_pictures/default-profile.jpg');
+        });
     
     // Set status badge
     let statusClass = '';
@@ -337,9 +348,20 @@ function openRunnerDetailsModal(runnerId) {
         .removeClass('status-pending status-approved status-rejected')
         .addClass(statusClass);
     
-    // Set document photos
-    $('#modal-id-photo').attr('src', runner.id_photo);
-    $('#modal-selfie-photo').attr('src', runner.selfie_photo);
+    // Set document photos with proper paths - Using BASE_URL
+    if (runner.id_photo) {
+        $('#modal-id-photo').attr('src', BASE_URL + runner.id_photo)
+            .on('error', function() {
+                $(this).attr('src', BASE_URL + 'assests/image/placeholder-id.jpg');
+            });
+    }
+    
+    if (runner.selfie_photo) {
+        $('#modal-selfie-photo').attr('src', BASE_URL + runner.selfie_photo)
+            .on('error', function() {
+                $(this).attr('src', BASE_URL + 'assests/image/placeholder-selfie.jpg');
+            });
+    }
     
     // Set transportation method
     $('#modal-transportation-method').text(capitalize(runner.transportation_method));
@@ -350,18 +372,25 @@ function openRunnerDetailsModal(runnerId) {
     // Show appropriate transportation details based on method
     if (runner.transportation_method === 'vehicle') {
         $('#vehicle-details-section').show();
-        $('#modal-vehicle-type').text(runner.vehicle_type);
-        $('#modal-registration-number').text(runner.registration_number);
-        $('#modal-license-number').text(runner.license_number);
-        $('#modal-vehicle-phone').text(runner.vehicle_phone);
-        $('#modal-vehicle-photo').attr('src', runner.vehicle_photo);
+        $('#modal-vehicle-type').text(runner.vehicle_type || 'Not specified');
+        $('#modal-registration-number').text(runner.registration_number || 'Not specified');
+        $('#modal-license-number').text(runner.license_number || 'Not specified');
+        $('#modal-vehicle-phone').text(runner.vehicle_phone || 'Not specified');
+        
+        // Set vehicle photo with proper path - Using BASE_URL
+        if (runner.vehicle_photo) {
+            $('#modal-vehicle-photo').attr('src', BASE_URL + runner.vehicle_photo)
+                .on('error', function() {
+                    $(this).attr('src', BASE_URL + 'assests/image/placeholder-vehicle.jpg');
+                });
+        }
     } else if (runner.transportation_method === 'walking') {
         $('#walking-details-section').show();
-        $('#modal-service-radius').text(runner.service_radius);
+        $('#modal-service-radius').text(runner.service_radius || 'Not specified');
     } else if (runner.transportation_method === 'commute') {
         $('#transit-details-section').show();
-        $('#modal-transit-type').text(runner.transit_type);
-        $('#modal-transit-radius').text(runner.transit_radius);
+        $('#modal-transit-type').text(runner.transit_type || 'Not specified');
+        $('#modal-transit-radius').text(runner.transit_radius || 'Not specified');
     }
     
     // Populate services list
