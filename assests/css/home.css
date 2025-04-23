@@ -509,7 +509,39 @@
       height: 30px;
     }
   }
+  .runner-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
   
+  .verified-badge {
+    font-size: 0.8rem;
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+  
+  .badge-primary-outline {
+    color: #0d6efd;
+    background-color: #f8f9fa;
+    border: 1px solid #0d6efd;
+  }
+  
+  .runner-card {
+    transition: transform 0.2s;
+  }
+  
+  .runner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .star-filled {
+    color: #ffc107;
+  }
   /* Add this to your existing styles.css file */
   
   

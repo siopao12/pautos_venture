@@ -160,11 +160,7 @@ error_log("User " . $_SESSION['user_id'] . " has location: " . ($hasLocation ? "
     include '../includes/reusable/home_runner.php';  
 ?>
 
-      <!-- Pagination -->
-      <?php
-    // Include the login form from auth/login.php
-    include '../includes/reusable/home_pagination.php';  
-?>
+
 <!-- Location Modal -->
 <?php
     // Include the login form from auth/login.php
@@ -190,7 +186,7 @@ error_log("User " . $_SESSION['user_id'] . " has location: " . ($hasLocation ? "
 </script>
   <script src="../assests/js/maps.js"></script>
   <script src="../assests/js/rn_application.js"></script>
- <!-- <script src="../assests/js/rn_modal.js"></script> -->
+ <script src="../assests/js/rn_modal.js"></script>
 
 </body>
 </html>
