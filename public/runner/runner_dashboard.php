@@ -393,4 +393,4 @@
     
     <!-- Maps API (Use your own API key here) -->
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
-    <script src ="../../assests/js/runner_dashboard.js"></script>
+    <script src="../../assests/js/runner_dashboard.js"></script>

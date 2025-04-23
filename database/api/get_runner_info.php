@@ -53,6 +53,15 @@ try {
         'runner_status' => $user_data['runner_status']
     ];
     
+    // Base URL with /pautos-venture prefix
+    $base_url = "";
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+        $base_url = "https://";
+    } else {
+        $base_url = "http://";
+    }
+    $base_url .= $_SERVER['HTTP_HOST'] . '/pautos-venture';
+    
     // Get profile picture if available
     $profile_query = "SELECT profile_picture FROM user_profiles WHERE user_id = :user_id";
     $profile_stmt = $conn->prepare($profile_query);
@@ -61,9 +70,18 @@ try {
     $profile_data = $profile_stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($profile_data && !empty($profile_data['profile_picture'])) {
-        $response['profile_pic'] = $profile_data['profile_picture'];
+        // If the profile picture is already a full URL
+        if (strpos($profile_data['profile_picture'], 'http') === 0) {
+            $response['profile_pic'] = $profile_data['profile_picture'];
+        } 
+        // If it's a filename, build the correct path
+        else {
+            $filename = basename($profile_data['profile_picture']);
+            $response['profile_pic'] = $base_url . '/assests/image/uploads/profile_pictures/' . $filename;
+        }
     } else {
-        $response['profile_pic'] = '../assests/image/default-profile.jpg';
+        // Default profile picture with correct path
+        $response['profile_pic'] = $base_url . '/assests/image/uploads/profile_pictures/default-profile.jpg';
     }
     
     // Get latest location information
@@ -166,6 +184,9 @@ try {
             }
         }
     }
+    
+    // Log response for debugging
+    error_log('Runner info response: ' . json_encode($response));
     
     // Send JSON response
     header('Content-Type: application/json');
