@@ -186,7 +186,7 @@ error_log("User " . $_SESSION['user_id'] . " has location: " . ($hasLocation ? "
 </script>
   <script src="../assests/js/maps.js"></script>
   <script src="../assests/js/rn_application.js"></script>
- <script src="../assests/js/rn_modal.js"></script>
-
+ <script src="../assests/js/displayed_runner.js"></script>
+ <script src="../assests/js/customer_booking.js"></script>
 </body>
 </html>

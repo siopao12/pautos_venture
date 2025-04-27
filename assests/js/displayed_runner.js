@@ -285,95 +285,101 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   }
   
-  // Create a runner card
-  function createRunnerCard(runner, containerType) {
-    const col = document.createElement('div');
-    
-    // Adjust column size based on container
-    if (containerType === 'modal') {
-      col.classList.add('col-md-6');
-    } else {
-      col.classList.add('col-md-6', 'col-lg-4');
-    }
-    
-    // Default profile image if none available
-    const profileImg = runner.profile_pic || '../public/assests/image/uploads/profile_pictures/profile.jpg';
-    
-    // Format distance
-    const distanceText = runner.distance ? `${runner.distance} km away` : 'Distance unknown';
-    
-    // Get transportation method for display
-    const transportMethod = runner.vehicle_type || runner.transportation_method || 'Not specified';
-    
-    // Calculate estimated price and delivery time
-    const estimate = calculateEstimatedPrice(runner.distance, runner.transportation_method, runner.vehicle_type);
-    
-    // Format services
-    const servicesBadges = runner.services_array && runner.services_array.length > 0
-      ? runner.services_array.map(service => 
-          `<span class="badge bg-light text-dark me-1 mb-1">${service}</span>`
-        ).join('')
-      : '<span class="badge bg-light text-muted">No services listed</span>';
-    
-    // Availability indicator
-    const availabilityBadge = runner.is_available 
-      ? '<span class="badge bg-success rounded-pill ms-2"><i class="bi bi-circle-fill me-1"></i>Available</span>'
-      : '';
-    
-    col.innerHTML = `
-      <div class="card h-100 runner-card">
-        <div class="card-body">
-          <div class="d-flex gap-3 mb-3">
-            <img src="${profileImg}" alt="${runner.name} profile" class="runner-img rounded-circle" 
-                 style="width: 60px; height: 60px; object-fit: cover;" 
-                 onerror="this.src='../public/assests/image/uploads/profile_pictures/profile.jpg'">
-            <div>
-              <div class="d-flex align-items-center gap-2 flex-wrap">
-                <h3 class="mb-0 fw-semibold fs-5">${runner.name || 'Unknown Runner'}</h3>
-                <span class="badge bg-primary rounded-pill">
-                  <i class="bi bi-patch-check-fill me-1"></i>Verified
-                </span>
-                ${availabilityBadge}
-              </div>
-              <div class="d-flex align-items-center text-muted small mt-1">
-                <i class="bi bi-geo-alt me-1"></i>
-                <span>${distanceText}</span>
-              </div>
-              <div class="d-flex align-items-center mt-1">
-                <i class="bi bi-star-fill text-warning me-1"></i>
-                <span class="small">4.8 (150 reviews)</span>
-              </div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <div class="small fw-medium mb-1">Services:</div>
-            <div class="d-flex flex-wrap">
-              ${servicesBadges}
-            </div>
-          </div>
-          <div class="mb-2">
-            <div class="small fw-medium mb-1">Transport:</div>
-            <div class="small text-muted">
-              <i class="bi bi-${getTransportIcon(transportMethod)} me-1"></i>
-              ${capitalizeFirstLetter(transportMethod)}
-            </div>
-          </div>
-          <div>
-            <div class="small fw-medium mb-1">Estimated:</div>
-            <div class="small text-muted">${estimate.price} | ${estimate.timeRange}</div>
-          </div>
-        </div>
-        <div class="card-footer bg-white border-top-0 pt-0">
-          <button class="btn btn-primary w-100" data-runner-id="${runner.runner_id}" onclick="bookRunner(${runner.runner_id}, '${(runner.name || 'Runner').replace(/'/g, "\\'")}')">
-            Book Now
-          </button>
-        </div>
-      </div>
-    `;
-    
-    return col;
+ // Modify the createRunnerCard function to pass distance and transport method
+function createRunnerCard(runner, containerType) {
+  const col = document.createElement('div');
+  
+  // Adjust column size based on container
+  if (containerType === 'modal') {
+    col.classList.add('col-md-6');
+  } else {
+    col.classList.add('col-md-6', 'col-lg-4');
   }
   
+  // Default profile image if none available
+  const profileImg = runner.profile_pic || '../public/assests/image/uploads/profile_pictures/profile.jpg';
+  
+  // Format distance
+  const distanceText = runner.distance ? `${runner.distance} km away` : 'Distance unknown';
+  
+  // Get transportation method for display
+  const transportMethod = runner.vehicle_type || runner.transportation_method || 'Not specified';
+  
+  // Calculate estimated price and delivery time
+  const estimate = calculateEstimatedPrice(runner.distance, runner.transportation_method, runner.vehicle_type);
+  
+  // Format services
+  const servicesBadges = runner.services_array && runner.services_array.length > 0
+    ? runner.services_array.map(service => 
+        `<span class="badge bg-light text-dark me-1 mb-1">${service}</span>`
+      ).join('')
+    : '<span class="badge bg-light text-muted">No services listed</span>';
+  
+  // Availability indicator
+  const availabilityBadge = runner.is_available 
+    ? '<span class="badge bg-success rounded-pill ms-2"><i class="bi bi-circle-fill me-1"></i>Available</span>'
+    : '';
+  
+  // Escape single quotes in the runner's name and transport method to prevent JS errors
+  const escapedName = (runner.name || 'Runner').replace(/'/g, "\\'");
+  const escapedTransport = transportMethod.replace(/'/g, "\\'");
+  
+  // Create the runner card HTML
+  col.innerHTML = `
+    <div class="card h-100 runner-card">
+      <div class="card-body">
+        <div class="d-flex gap-3 mb-3">
+          <img src="${profileImg}" alt="${runner.name} profile" class="runner-img rounded-circle" 
+               style="width: 60px; height: 60px; object-fit: cover;" 
+               onerror="this.src='../public/assests/image/uploads/profile_pictures/profile.jpg'">
+          <div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <h3 class="mb-0 fw-semibold fs-5">${runner.name || 'Unknown Runner'}</h3>
+              <span class="badge bg-primary rounded-pill">
+                <i class="bi bi-patch-check-fill me-1"></i>Verified
+              </span>
+              ${availabilityBadge}
+            </div>
+            <div class="d-flex align-items-center text-muted small mt-1">
+              <i class="bi bi-geo-alt me-1"></i>
+              <span>${distanceText}</span>
+            </div>
+            <div class="d-flex align-items-center mt-1">
+              <i class="bi bi-star-fill text-warning me-1"></i>
+              <span class="small">4.8 (150 reviews)</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="small fw-medium mb-1">Services:</div>
+          <div class="d-flex flex-wrap">
+            ${servicesBadges}
+          </div>
+        </div>
+        <div class="mb-2">
+          <div class="small fw-medium mb-1">Transport:</div>
+          <div class="small text-muted">
+            <i class="bi bi-${getTransportIcon(transportMethod)} me-1"></i>
+            ${capitalizeFirstLetter(transportMethod)}
+          </div>
+        </div>
+        <div>
+          <div class="small fw-medium mb-1">Estimated:</div>
+          <div class="small text-muted">${estimate.price} | ${estimate.timeRange}</div>
+        </div>
+      </div>
+      <div class="card-footer bg-white border-top-0 pt-0">
+        <button class="btn btn-primary w-100" data-runner-id="${runner.runner_id}" 
+                onclick="bookRunner(${runner.runner_id}, '${escapedName}', ${runner.distance || 0}, '${escapedTransport}')">
+          Book Now
+        </button>
+      </div>
+    </div>
+  `;
+  
+  return col;
+}
+
   // Helper function to get appropriate icon for transport method
   function getTransportIcon(transportMethod) {
     const type = transportMethod.toLowerCase();
@@ -455,23 +461,6 @@ document.addEventListener('DOMContentLoaded', function() {
       elements.mainNoRunnersMessage.classList.remove('d-none');
     }
   }
-  
-  // Book runner function (global for onclick access)
-  window.bookRunner = function(runnerId, runnerName) {
-    console.log(`Booking runner: ${runnerName} (ID: ${runnerId})`);
-    
-    // Close modal if it's open
-    const modal = bootstrap.Modal.getInstance(document.getElementById('onlineRunnersModal'));
-    if (modal) {
-      modal.hide();
-    }
-    
-    // Show booking confirmation
-    alert(`You selected ${runnerName}. Booking functionality will be implemented in the future.`);
-    
-    // For future implementation, you could redirect:
-    // window.location.href = `/booking.php?runner_id=${runnerId}`;
-  };
   
   // Initialize and start fetching
   initEventListeners();
